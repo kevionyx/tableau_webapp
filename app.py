@@ -109,7 +109,10 @@ def index():
             guest_width = pdf.get_string_width(table)
             pdf.text(x=(WIDTH - guest_width) / 2 - line * GUEST_D, y=HEIGHT / 2 - GUEST_C, txt=table)
             pdf.set_line_width(LINE_WIDTH)
-            pdf.line(WIDTH - guest_width) / 2 - line * GUEST_D, HEIGHT / 2 - GUEST_C + LINE_D)
+            pdf.line((WIDTH - guest_width) / 2 - line * GUEST_D,
+                     HEIGHT / 2 - GUEST_C + LINE_D,
+                     (WIDTH - guest_width) / 2 - line * GUEST_D + guest_width,
+                     HEIGHT / 2 - GUEST_C + LINE_D)
             row = 1
             for guest in tableau[table]:
                 row += 1
