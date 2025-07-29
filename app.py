@@ -50,7 +50,11 @@ def index():
                             "type": "text",
                             "text": '''
                             Analizza l’immagine e restituisci un dizionario JSON.
-        Ogni chiave deve essere nel formato "Tavolo X" dove X è il numero che identifica un gruppo di ospiti.
+        La prima chiave sarà "Dati", e come valore avrà una lista di 3 elementi che contiene il tipo di evento (matrimonio, 18°, 50°, battesimo o altri..), 
+        il nome del festeggiato (possono essere anche più di uno, specie nei matrimoni, in tal caso suddividi con la lettera "&", es. Giulia & Marco) 
+        e la data (giorno della settimana, gg mese aa, es. Sabato 15 Luglio 2025). 
+        Se non hai i dati, deducili, ma non lasciare vuoto. 
+        Il resto deve essere nel formato "Tavolo X" dove X è il numero che identifica un gruppo di ospiti.
         Tutti i nomi sotto, accanto o riferiti visivamente a quel numero/simbolo fanno parte dello stesso tavolo, anche se scritti su colonne diverse,
         e saranno il valore da associare alla chiave, sotto forma di lista.
                             '''
@@ -81,23 +85,23 @@ def index():
         pdf.add_font(FONT, "", "edwardianscriptitc.ttf", uni=True)
 
         pdf.set_font(FONT, size=TITLE_SIZE)
-        title_width = pdf.get_string_width("Matrimonio")
-        pdf.text(x=(WIDTH - title_width) / 2, y=HEIGHT / 2 - TITLE_C, txt="Matrimonio")
+        title_width = pdf.get_string_width(tableau['Dati'][0])
+        pdf.text(x=(WIDTH - title_width) / 2, y=HEIGHT / 2 - TITLE_C, txt=tableau['Dati'][0])
 
         pdf.set_font(FONT, size=CELEBRATED_SIZE)
-        celebrated_width = pdf.get_string_width("Riccardo & Maria")
-        pdf.text(x=(WIDTH - celebrated_width) / 2, y=HEIGHT / 2 - CELEBRATED_C, txt="Riccardo & Maria")
+        celebrated_width = pdf.get_string_width(tableau['Dati'][1])
+        pdf.text(x=(WIDTH - celebrated_width) / 2, y=HEIGHT / 2 - CELEBRATED_C, txt=tableau['Dati'][1])
 
         pdf.set_font(FONT, size=DATE_SIZE)
-        date_width = pdf.get_string_width("Sabato 09 Agosto 2025")
-        pdf.text(x=(WIDTH - date_width) / 2, y=HEIGHT / 2 - DATE_C, txt="Sabato 09 Agosto 2025")
+        date_width = pdf.get_string_width(tableau['Dati'][2])
+        pdf.text(x=(WIDTH - date_width) / 2, y=HEIGHT / 2 - DATE_C, txt=tableau['Dati'][2]")
 
         pdf.set_font(FONT, size=FYT_SIZE)
         fyt_width = pdf.get_string_width("Find Your Table")
         pdf.text(x=(WIDTH - fyt_width) / 2, y=HEIGHT / 2 - FYT_C, txt="Find Your Table")
 
         pdf.set_font(FONT, size=GUEST_SIZE)
-        line = (len(tableau) - 1) / 2
+        line = (len(tableau) - 2) / 2
         for table in list(tableau.keys()):
             guest_width = pdf.get_string_width(table)
             pdf.text(x=(WIDTH - guest_width) / 2 - line * GUEST_D, y=HEIGHT / 2 - GUEST_C, txt=table)
