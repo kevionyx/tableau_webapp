@@ -22,6 +22,8 @@ FYT_C = 20
 GUEST_SIZE = 60
 GUEST_C = -25
 GUEST_D = 90
+LINE_WIDTH = .5
+LINE_D = 30
 
 app = Flask(__name__)
 
@@ -56,7 +58,8 @@ def index():
         Se non hai i dati, deducili, ma non lasciare vuoto. 
         Il resto deve essere nel formato "Tavolo X" dove X è il numero che identifica un gruppo di ospiti.
         Tutti i nomi sotto, accanto o riferiti visivamente a quel numero/simbolo fanno parte dello stesso tavolo, anche se scritti su colonne diverse,
-        e saranno il valore da associare alla chiave, sotto forma di lista.
+        e saranno il valore da associare alla chiave, sotto forma di lista. Se ci sono errori ortografici, correggili o deduci il nome.
+        Non aggiungere tavoli se non ha ospiti, e fai attenzione a non dimenticarti nessuno. 
                             '''
                         },
                         {
@@ -82,7 +85,7 @@ def index():
         pdf = FPDF(format=(WIDTH, HEIGHT))
         pdf.add_page()  # di default bianco
         pdf.image("Tableau Magnolia Vuoto.jpg", x=0, y=0, w=WIDTH, h=HEIGHT)
-        pdf.add_font(FONT, "", "edwardianscriptitc.ttf", uni=True)
+        pdf.add_font(FONT, "", "edwardian-script-itc-bold.ttf", uni=True)
 
         pdf.set_font(FONT, size=TITLE_SIZE)
         title_width = pdf.get_string_width(tableau['Dati'][0])
@@ -105,6 +108,8 @@ def index():
         for table in list(tableau.keys())[1:]:
             guest_width = pdf.get_string_width(table)
             pdf.text(x=(WIDTH - guest_width) / 2 - line * GUEST_D, y=HEIGHT / 2 - GUEST_C, txt=table)
+            pdf.set_line_width(LINE_WIDTH)
+            pdf.line(WIDTH - guest_width) / 2 - line * GUEST_D, HEIGHT / 2 - GUEST_C + LINE_D)
             row = 1
             for guest in tableau[table]:
                 row += 1
