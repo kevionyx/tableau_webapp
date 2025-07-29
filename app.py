@@ -7,7 +7,7 @@ import os
 
 load_dotenv()
 
-API_KEY = os.getenv("OPENAI_API_KEY")
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 FONT = "EdwardianScriptITC"
 WIDTH = 1492
 HEIGHT = 692
@@ -35,7 +35,7 @@ def index():
         file_path = "uploads/" + file.filename
         file.save(file_path)
 
-        client = OpenAI(api_key=API_KEY)
+        client = OpenAI(api_key=OPENAI_API_KEY)
 
         with open(file_path, "rb") as image_file:
             base64_image = base64.b64encode(image_file.read()).decode("utf-8")
