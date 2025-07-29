@@ -94,7 +94,7 @@ def index():
 
         pdf.set_font(FONT, size=DATE_SIZE)
         date_width = pdf.get_string_width(tableau['Dati'][2])
-        pdf.text(x=(WIDTH - date_width) / 2, y=HEIGHT / 2 - DATE_C, txt=tableau['Dati'][2]")
+        pdf.text(x=(WIDTH - date_width) / 2, y=HEIGHT / 2 - DATE_C, txt=tableau['Dati'][2])
 
         pdf.set_font(FONT, size=FYT_SIZE)
         fyt_width = pdf.get_string_width("Find Your Table")
