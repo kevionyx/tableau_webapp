@@ -1,7 +1,7 @@
 from flask import Flask, request, render_template, send_file
 from PIL import Image
 from openai import OpenAI
-import openai, io, base64, json, pandas as pd
+import openai, io, base64, json
 from fpdf import FPDF
 from dotenv import load_dotenv
 import os
