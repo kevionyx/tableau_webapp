@@ -1,5 +1,4 @@
 from flask import Flask, request, render_template, send_file
-from PIL import Image
 from openai import OpenAI
 import openai, io, base64, json
 from fpdf import FPDF
