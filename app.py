@@ -102,7 +102,7 @@ def index():
 
         pdf.set_font(FONT, size=GUEST_SIZE)
         line = (len(tableau) - 2) / 2
-        for table in list(tableau.keys()[1:]):
+        for table in list(tableau.keys())[1:]:
             guest_width = pdf.get_string_width(table)
             pdf.text(x=(WIDTH - guest_width) / 2 - line * GUEST_D, y=HEIGHT / 2 - GUEST_C, txt=table)
             row = 1
