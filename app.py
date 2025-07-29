@@ -8,22 +8,24 @@ import os
 load_dotenv()
 
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
-FONT = "EdwardianScriptITC"
+FONT = "ESITC"
+FONT_BOLD = "ESITC-Bold"
 WIDTH = 1492
 HEIGHT = 692
-TITLE_SIZE = 360
+TITLE_SIZE = 400
 TITLE_C = 160
 CELEBRATED_SIZE = 130
 CELEBRATED_C = 100
-DATE_SIZE = 110
+DATE_SIZE = 100
 DATE_C = 60
-FYT_SIZE = 90
+FYT_SIZE = 80
 FYT_C = 20
-GUEST_SIZE = 60
+TABLE_SIZE = 65
+GUEST_SIZE = 55
 GUEST_C = -25
 GUEST_D = 90
 LINE_WIDTH = .5
-LINE_D = 30
+LINE_D = 5
 
 app = Flask(__name__)
 
@@ -84,28 +86,29 @@ def index():
 
         pdf = FPDF(format=(WIDTH, HEIGHT))
         pdf.add_page()  # di default bianco
-        pdf.image("Tableau Magnolia Vuoto.jpg", x=0, y=0, w=WIDTH, h=HEIGHT)
-        pdf.add_font(FONT, "", "edwardian-script-itc-bold.ttf", uni=True)
+        pdf.image("Sfondo Tableau Magnolia.png", x=0, y=0, w=WIDTH, h=HEIGHT)
+        pdf.add_font(FONT, "", "edwardianscriptitc.ttf", uni=True)
+        pdf.add_font(FONT_BOLD, "", "edwardian-script-itc-bold.ttf", uni=True)
 
-        pdf.set_font(FONT, size=TITLE_SIZE)
+        pdf.set_font(FONT_BOLD, size=TITLE_SIZE)
         title_width = pdf.get_string_width(tableau['Dati'][0])
         pdf.text(x=(WIDTH - title_width) / 2, y=HEIGHT / 2 - TITLE_C, txt=tableau['Dati'][0])
 
-        pdf.set_font(FONT, size=CELEBRATED_SIZE)
+        pdf.set_font(FONT_BOLD, size=CELEBRATED_SIZE)
         celebrated_width = pdf.get_string_width(tableau['Dati'][1])
         pdf.text(x=(WIDTH - celebrated_width) / 2, y=HEIGHT / 2 - CELEBRATED_C, txt=tableau['Dati'][1])
 
-        pdf.set_font(FONT, size=DATE_SIZE)
+        pdf.set_font(FONT_BOLD, size=DATE_SIZE)
         date_width = pdf.get_string_width(tableau['Dati'][2])
         pdf.text(x=(WIDTH - date_width) / 2, y=HEIGHT / 2 - DATE_C, txt=tableau['Dati'][2])
 
-        pdf.set_font(FONT, size=FYT_SIZE)
+        pdf.set_font(FONT_BOLD, size=FYT_SIZE)
         fyt_width = pdf.get_string_width("Find Your Table")
         pdf.text(x=(WIDTH - fyt_width) / 2, y=HEIGHT / 2 - FYT_C, txt="Find Your Table")
 
-        pdf.set_font(FONT, size=GUEST_SIZE)
         line = (len(tableau) - 2) / 2
         for table in list(tableau.keys())[1:]:
+            pdf.set_font(FONT_BOLD, size=TABLE_SIZE)
             guest_width = pdf.get_string_width(table)
             pdf.text(x=(WIDTH - guest_width) / 2 - line * GUEST_D, y=HEIGHT / 2 - GUEST_C, txt=table)
             pdf.set_line_width(LINE_WIDTH)
@@ -115,6 +118,7 @@ def index():
                      HEIGHT / 2 - GUEST_C + LINE_D)
             row = 1
             for guest in tableau[table]:
+                pdf.set_font(FONT_BOLD, size=GUEST_SIZE)
                 row += 1
                 guest_width = pdf.get_string_width(guest)
                 pdf.text(x=(WIDTH - guest_width) / 2 - line * GUEST_D, y=HEIGHT / 2 - row * GUEST_C, txt=guest)
