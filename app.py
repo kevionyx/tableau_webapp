@@ -88,7 +88,7 @@ def index():
         pdf.add_page()  # di default bianco
         pdf.image("Sfondo Tableau Magnolia.png", x=0, y=0, w=WIDTH, h=HEIGHT)
         pdf.add_font(FONT, "", "edwardianscriptitc.ttf", uni=True)
-        pdf.add_font(FONT_BOLD, "", "edwardian-script-itc-bold.ttf", uni=True)
+        # pdf.add_font(FONT_BOLD, "", "edwardian-script-itc-bold.ttf", uni=True)
 
         pdf.set_font(FONT, size=TITLE_SIZE)
         title_width = pdf.get_string_width(tableau['Dati'][0])
