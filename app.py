@@ -14,18 +14,30 @@ WIDTH = 1492
 HEIGHT = 692
 TITLE_SIZE = 400
 TITLE_C = 160
+TITLE_SPREAD = .5
 CELEBRATED_SIZE = 130
 CELEBRATED_C = 100
+CELEBRATED_SPREAD = .3
 DATE_SIZE = 100
 DATE_C = 60
+DATE_SPREAD = .3
 FYT_SIZE = 80
 FYT_C = 20
-TABLE_SIZE = 65
-GUEST_SIZE = 55
+FYT_SPREAD = .3
+TABLE_SIZE = 70
+TABLE_SPREAD = .2
+GUEST_SIZE = 60
 GUEST_C = -25
 GUEST_D = 90
+GUEST_SPREAD = .2
 LINE_WIDTH = .5
 LINE_D = 5
+
+def draw_bold_text(pdf, x, y, text, font, size, spread=0.3):
+    pdf.set_font(font, '', size)
+    offsets = [(0,0), (spread,0), (-spread,0), (0,spread), (0,-spread)]
+    for dx, dy in offsets:
+        pdf.text(x + dx, y + dy, text)
 
 app = Flask(__name__)
 
@@ -80,7 +92,7 @@ def index():
         tableau_str = tableau_str.replace("```json\n", "").replace("\n```", "")
         tableau = json.loads(tableau_str)
 
-        max_len = max(len(v) for v in tableau.values())
+        max_len = max(len(v) for v in tableau[1:].values())
         for k in tableau:
             tableau[k] += [""] * (max_len - len(tableau[k]))
 
@@ -88,29 +100,33 @@ def index():
         pdf.add_page()  # di default bianco
         pdf.image("Sfondo Tableau Magnolia.png", x=0, y=0, w=WIDTH, h=HEIGHT)
         pdf.add_font(FONT, "", "edwardianscriptitc.ttf", uni=True)
-        # pdf.add_font(FONT_BOLD, "", "edwardian-script-itc-bold.ttf", uni=True)
 
         pdf.set_font(FONT, size=TITLE_SIZE)
         title_width = pdf.get_string_width(tableau['Dati'][0])
-        pdf.text(x=(WIDTH - title_width) / 2, y=HEIGHT / 2 - TITLE_C, txt=tableau['Dati'][0])
+        draw_bold_text(pdf, x=(WIDTH - title_width) / 2, y=HEIGHT / 2 - TITLE_C,
+                       text=tableau['Dati'][0], font=FONT, size=TITLE_SIZE, spread=TITLE_SPREAD)
 
         pdf.set_font(FONT, size=CELEBRATED_SIZE)
         celebrated_width = pdf.get_string_width(tableau['Dati'][1])
-        pdf.text(x=(WIDTH - celebrated_width) / 2, y=HEIGHT / 2 - CELEBRATED_C, txt=tableau['Dati'][1])
+        draw_bold_text(pdf, x=(WIDTH - celebrated_width) / 2, y=HEIGHT / 2 - CELEBRATED_C,
+                       text=tableau['Dati'][1], font=FONT, size=CELEBRATED_SIZE, spread=CELEBRATED_SPREAD)
 
         pdf.set_font(FONT, size=DATE_SIZE)
         date_width = pdf.get_string_width(tableau['Dati'][2])
-        pdf.text(x=(WIDTH - date_width) / 2, y=HEIGHT / 2 - DATE_C, txt=tableau['Dati'][2])
+        draw_bold_text(pdf, x=(WIDTH - date_width) / 2, y=HEIGHT / 2 - DATE_C,
+                       text=tableau['Dati'][2], font=FONT, size=DATE_SIZE, spread=DATE_SPREAD)
 
         pdf.set_font(FONT, size=FYT_SIZE)
         fyt_width = pdf.get_string_width("Find Your Table")
-        pdf.text(x=(WIDTH - fyt_width) / 2, y=HEIGHT / 2 - FYT_C, txt="Find Your Table")
+        draw_bold_text(pdf, x=(WIDTH - fyt_width) / 2, y=HEIGHT / 2 - FYT_C,
+                       text="Find Your Table", font=FONT, size=FYT_SIZE, spread=FYT_SPREAD)
 
         line = (len(tableau) - 2) / 2
         for table in list(tableau.keys())[1:]:
             pdf.set_font(FONT, size=TABLE_SIZE)
             guest_width = pdf.get_string_width(table)
-            pdf.text(x=(WIDTH - guest_width) / 2 - line * GUEST_D, y=HEIGHT / 2 - GUEST_C, txt=table)
+            draw_bold_text(pdf, x=(WIDTH - guest_width) / 2 - line * GUEST_D, y=HEIGHT / 2 - GUEST_C,
+                           text=table, font=FONT, size=TABLE_SIZE, spread=TABLE_SPREAD)
             pdf.set_line_width(LINE_WIDTH)
             pdf.line((WIDTH - guest_width) / 2 - line * GUEST_D,
                      HEIGHT / 2 - GUEST_C + LINE_D,
@@ -121,7 +137,8 @@ def index():
                 pdf.set_font(FONT, size=GUEST_SIZE)
                 row += 1
                 guest_width = pdf.get_string_width(guest)
-                pdf.text(x=(WIDTH - guest_width) / 2 - line * GUEST_D, y=HEIGHT / 2 - row * GUEST_C, txt=guest)
+                draw_bold_text(pdf, x=(WIDTH - guest_width) / 2 - line * GUEST_D, y=HEIGHT / 2 - row * GUEST_C,
+                               text=guest, font=FONT, size=GUEST_SIZE, spread=GUEST_SPREAD)
             line -= 1
 
         output_path = "outputs/" + file.filename.rsplit(".", 1)[0] + ".pdf"
