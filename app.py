@@ -92,7 +92,7 @@ def index():
         tableau_str = tableau_str.replace("```json\n", "").replace("\n```", "")
         tableau = json.loads(tableau_str)
 
-        max_len = max(len(v) for v in tableau[1:].values())
+        max_len = max(len(v) for v in tableau.values())
         for k in tableau:
             tableau[k] += [""] * (max_len - len(tableau[k]))
 
