@@ -3,12 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <title>Tableau Generator</title>
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='tableau_favicon.ico') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
+
     <h1>Carica la foto del tableau scritto a mano</h1>
-    <form method="post" enctype="multipart/form-data">
-        <input type="file" name="image" accept="image/*,application/pdf" required>
-        <button type="submit">Genera PDF</button>
+
+    <div id="loader" style="display:none;">
+    <div class="spinner"></div>
+    <p>Sto generando il PDF, attendi...</p>
+    </div>
+
+    <form id="uploadForm" method="post" enctype="multipart/form-data">
+    <input type="file" name="image" accept="image/*,application/pdf" required>
+    <button type="submit">Genera PDF</button>
     </form>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+
 </body>
 </html>
